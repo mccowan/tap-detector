@@ -1,6 +1,6 @@
-package mccowan.tap;
+package com.github.mccowan.tap;
 
-import mccowan.util.Log;
+import com.github.mccowan.common.Log;
 
 import java.io.IOException;
 import java.util.*;
@@ -10,17 +10,19 @@ import java.util.*;
  * <p/>
  * TODO: For now, just collects and dumps data at request.
  */
-public class TapDetector {
-    private final static String LOG_TAG = TapDetector.class.getCanonicalName();
+public class StreamingTapDetectorDelegator {
+    private final static String LOG_TAG = StreamingTapDetectorDelegator.class.getCanonicalName();
     public interface TapHandler {
         void onTap();
     }
 
     private final TapHandler tapHandler;
-    final List<AccelerationVectorObservation> observations = Collections.synchronizedList(new ArrayList<AccelerationVectorObservation>(10000));
+    private final ListBasedTapDetector tapDetector;
+    final List<Acceleration> observations = Collections.synchronizedList(new ArrayList<Acceleration>(10000));
 
-    public TapDetector(final TapHandler tapHandler) {
+    public StreamingTapDetectorDelegator(final TapHandler tapHandler, ListBasedTapDetector tapDetector, long expectedTapDurationNanos) {
         this.tapHandler = tapHandler;
+        this.tapDetector = tapDetector;
     }
 
     /** Incorporates the provided accuracy change into the tap-detection analysis. */
@@ -30,7 +32,7 @@ public class TapDetector {
 
     /** Incorporates the provided sensor data into the tap-detection analysis. */
     public synchronized void acceptAccelerometerData(final long observationNanosecond, final double x, final double y, final double z) {
-        observations.add(new AccelerationVectorObservation(x, y, z, observationNanosecond));
+        observations.add(new Acceleration(x, y, z, observationNanosecond));
         searchAndRemoveTriggeredTaps();
         prune();
     }
@@ -44,11 +46,11 @@ public class TapDetector {
     }
 
     public synchronized void writeAndPurgeData() throws IOException {
-        final Iterator<AccelerationVectorObservation> iterator = observations.iterator();
+        final Iterator<Acceleration> iterator = observations.iterator();
         Long start = null;
         int i = 0;
         while (iterator.hasNext()) {
-            final AccelerationVectorObservation n = iterator.next();
+            final Acceleration n = iterator.next();
             if (start == null) start = n.getNanoTime();
             Log.d("DATA", String.format("%s\t%s\t%s\t%s\t%s\t%s", ++i, n.getNanoTime() - start, n.getX(), n.getY(), n.getZ(), n.getMagnitude()));
             iterator.remove();

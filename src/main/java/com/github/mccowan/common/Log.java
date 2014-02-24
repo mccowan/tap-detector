@@ -1,11 +1,11 @@
-package mccowan.util;
+package com.github.mccowan.common;
 
 import java.io.PrintStream;
 
 /**
  * TODO$(user): Class description
  *
- * @author mccowan
+ * @author com.github.mccowan
  */
 public class Log {
     final static PrintStream STREAM = System.err;
