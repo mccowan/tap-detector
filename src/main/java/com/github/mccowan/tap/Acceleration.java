@@ -5,13 +5,6 @@ import com.github.mccowan.timeseries.TimedEntity;
 import java.util.Comparator;
 
 class Acceleration implements TimedEntity {
-    public static final Comparator<Acceleration> OBSERVATION_TIME_COMPARATOR = new Comparator<Acceleration>() {
-        @Override
-        public int compare(Acceleration o1, Acceleration o2) {
-            return Long.compare(o1.getNanoTime(), o2.getNanoTime());
-        }
-    };
-
     public static final Comparator<Acceleration> MAGNITUDE_COMPARATOR = new Comparator<Acceleration>() {
         @Override
         public int compare(Acceleration o1, Acceleration o2) {
@@ -48,6 +41,11 @@ class Acceleration implements TimedEntity {
 
     public double getMagnitude() {
         return magnitude;
+    }
+
+    @Override
+    public String toString() {
+        return "Acceleration(" + observationNanoTime + ":::" + x + ':' + y + ':' + z + "//" + magnitude + ')';
     }
 
     @Override

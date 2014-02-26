@@ -1,7 +1,6 @@
 package com.github.mccowan.common;
 
 import com.google.common.collect.ImmutableList;
-import junit.framework.TestCase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

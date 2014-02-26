@@ -92,7 +92,7 @@ public class Lists {
         public int middleIndex() {
             return at;
         }
-        
+
         public T middle() {
             return middle;
         }
@@ -103,24 +103,6 @@ public class Lists {
 
         public List<T> left() {
             return originalList.subList(0, at);
-        }
-    }
-
-    /** Consider making this some sort of more magic constructor. */
-    public static class IndexInterval {
-        final int start, end;
-
-        public int start() {
-            return start;
-        }
-
-        public int end() {
-            return end;
-        }
-
-        public IndexInterval(int start, int end) {
-            this.start = start;
-            this.end = end;
         }
     }
 }

@@ -4,7 +4,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import junit.framework.TestCase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -30,9 +29,8 @@ public class SynchronousTimeSeriesTest {
 
             TestEntity that = (TestEntity) o;
 
-            if (time != that.time) return false;
+            return time == that.time;
 
-            return true;
         }
 
         @Override

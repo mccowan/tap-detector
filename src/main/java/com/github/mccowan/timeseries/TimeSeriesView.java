@@ -1,7 +1,5 @@
 package com.github.mccowan.timeseries;
 
-import java.util.Iterator;
-
 /**
  * TODO$(user): Class description
  *
@@ -19,6 +17,4 @@ public interface TimeSeriesView<T extends TimedEntity> extends Iterable<T> {
 
     /** The range this time series spans. */
     SynchronousTimeSeries.TimeRange range();
-    
-    int size();
 }

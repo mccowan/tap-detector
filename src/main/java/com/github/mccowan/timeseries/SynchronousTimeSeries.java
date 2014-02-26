@@ -7,17 +7,18 @@ import com.google.common.collect.PeekingIterator;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.PriorityQueue;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * Non-thread-safe implementation of {@link com.github.mccowan.timeseries.TimeSeries}.
  * <p/>
  * TODO: Need to galvanize what's going on with all the simultaneous iterators here... it is a problemo.
+ * TODO: Refactor to use {@link com.google.common.collect.Range}
  *
  * @author mccowan
  */
 public class SynchronousTimeSeries<T extends TimedEntity> implements TimeSeries<T> {
-    //TODO: Refacotr to use google Range
     public static class TimeRange {
         public final long start, end;
 
@@ -32,18 +33,17 @@ public class SynchronousTimeSeries<T extends TimedEntity> implements TimeSeries<
         }
     }
 
-    // TODO: Not the greatest implementation; almost all cases = add to end, this probably does binary serch each time
-    final PriorityQueue<T> orderedElements;
+    private final SortedSet<T> orderedElements;
 
     public SynchronousTimeSeries() {
-        orderedElements = new PriorityQueue<>(11, TimedEntities.ASCENDING_COMPARATOR);
+        orderedElements = new TreeSet<>(TimedEntities.ASCENDING_COMPARATOR);
     }
 
     @Override
     public void pruneBefore(long youngest) {
         final Iterator<T> i = orderedElements.iterator();
         while (i.hasNext()) {
-            if (i.next().getTime() < youngest)
+            if (i.next().getTime() <= youngest)
                 i.remove();
             else
                 break;
@@ -82,11 +82,6 @@ public class SynchronousTimeSeries<T extends TimedEntity> implements TimeSeries<
                 break;
         }
         return ts;
-    }
-
-    @Override
-    public int size() {
-        return orderedElements.size();
     }
 
     @Override

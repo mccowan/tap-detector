@@ -1,7 +1,5 @@
 package com.github.mccowan.timeseries;
 
-import java.util.Iterator;
-
 /**
  * Collator for a collection of {@link com.github.mccowan.timeseries.TimedEntity}s.
  *

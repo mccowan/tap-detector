@@ -15,7 +15,7 @@ public class Log {
     }
     
     private static void emit(final String level, final String tag, final Object... values) {
-        System.out.print("[" + level + "] " + tag);
+        STREAM.print("[" + level + "] " + tag);
         for (Object value : values) {
             STREAM.print(value);
         }
